@@ -1,0 +1,43 @@
+{% extends "base.html.jinja" %}
+{% block content %}
+    <h2 class="mb-4 text-center">Lista produktów</h2>
+        <div class="container table-responsive">
+            <table class="table table-bordered  table-hover">
+                <thead class="text-light">
+                    <tr>
+                        <th class="col">ID Produktu</th>
+                        <th class="col">Nazwa Produktu</th>
+                        <th class="col">Liczba Opinii</th>
+                        <th class="col">Liczba Zalet</th>
+                        <th class="col">Liczba Wad</th>
+                        <th class="col">Średnia Ocena</th>
+                        <th class="col">Pobierz Opinie</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light">
+                    {% for product in products %}
+                        <tr class="align-middle">
+                            {% for value in product.values() %}
+                                {% if value != product['product_name'] %}
+                                    <td>{{value}}</td>
+                                {% else %}
+                                    <td>
+                                        <a class="text-decoration-none" href="{{url_for('product', product_id=product['product_id'])}}">
+                                            {{value}}<i class="bi bi-arrow-up-right-square ms-1"></i>
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>
+                                {% for extension in ["json", "csv", "xlsx"] %}
+                                    <a class="text-decoration-none" href="{{url_for('download_opinions', product_id=product['product_id'], extension=extension)}}">
+                                        {{extension.upper()}}<i class="bi bi-filetype-{{extension}} ms-1"></i>
+                                    </a><br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock content %}
